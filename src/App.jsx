@@ -10,7 +10,7 @@ import CreateBook from './pages/CreateBook';
 import UpdateBook from './pages/UpdateBook'; 
 import Book from './pages/Book';
 import ReadBook from './pages/ReadBook';
-import { ProtectedRoute } from './components/protectedRoute';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
   return (
