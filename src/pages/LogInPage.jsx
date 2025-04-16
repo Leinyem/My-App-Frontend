@@ -22,7 +22,8 @@ const LogInPage = () => {
       .then((res) => {
         console.log("user was logged in!", res.data);
         localStorage.setItem("authToken", res.data.authToken); 
-        authenticateUser()
+        
+        return authenticateUser()
        
       })
       .then (()=> {
