@@ -10,24 +10,19 @@ const BookContextWrapper = ({ children }) => {
   const [borrowedBooks, setBorrowedBooks] = useState([]);
   const [availableBooks, setAvailableBooks] = useState([]);
   const [allBooks, setAllBooks] = useState([]);
-   // Changed from allAvailableBooks to availableBooks
+  // Changed from allAvailableBooks to availableBooks
   const nav = useNavigate();
 
   // VERIFY THE TOKEN AGAIN WHEN RELOAD!!
-const {currentUser} = useContext (AuthContext)
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
+    if (currentUser) {
+      getAllBooks();
 
-if(currentUser){
-
- getAllBooks();
-
-setBorrowedBooks(currentUser.borrowedBooks);
-setCreatedBooks(currentUser.createdBooks);
-
-}
-
-   
+      setBorrowedBooks(currentUser.borrowedBooks);
+      setCreatedBooks(currentUser.createdBooks);
+    }
   }, [currentUser]);
 
   // GET all books from the API
@@ -37,10 +32,9 @@ setCreatedBooks(currentUser.createdBooks);
       .get(`${import.meta.env.VITE_API_URL}/book/books`)
       .then((res) => {
         console.log("Books achieved!:", res.data.books);
-       
-        setAllBooks(res.data.books);  
-        setAvailableBooks(res.data.books.filter((book) => book.available === "available"));
-       
+
+        setAllBooks(res.data.books);
+        setAvailableBooks(res.data.books.filter((book) => book.available));
       })
       .catch((err) => {
         console.error("Books lost somewhere uncertain:", err);
@@ -51,20 +45,44 @@ setCreatedBooks(currentUser.createdBooks);
 
   const handleCreateBook = async (event, newBook) => {
     event.preventDefault();
-    console.log('current user is:', currentUser) // we get the data of the books in the response. Las 3 listas.
+    console.log("current user is:", currentUser); // we get the data of the books in the response. Las 3 listas.
 
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/book/create-a-book`,
         newBook
       );
-      console.log("Book created:", data)
+      console.log("Book created:", data);
       console.log([data.book, ...createdBooks]);
 
       setCreatedBooks([data.book, ...createdBooks]); // Add JUST the data
-      nav("/profile"); 
+      nav("/profile");
     } catch (error) {
       console.error("Error creating the book:", error);
+    }
+  };
+
+  // MAKE a book available (move it from "created" to "available")
+
+  const handleMakeBookAvailable = async (bookId) => {
+    try {
+      const { data } = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/book/release/${bookId}`
+      );
+      console.log("Book is now available:", data);
+
+      setAvailableBooks([data, ...availableBooks]); // Add to available here
+      setCreatedBooks((prevBooks) =>
+        prevBooks.map((book) => {
+          if (book._id === bookId) {
+            return data;
+          } else {
+            return book;
+          }
+        })
+      ); // Remove from created
+    } catch (error) {
+      console.error("Error making the book available:", error);
     }
   };
 
@@ -72,13 +90,14 @@ setCreatedBooks(currentUser.createdBooks);
 
   const handleBorrowBook = async (bookId) => {
     try {
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/book/borrow/${bookId}`
+      const { data } = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/book/borrow/${bookId}`,
+        { userId: currentUser._id }
       );
       console.log("Book borrowed:", data);
       setBorrowedBooks([data, ...borrowedBooks]); // Add the book to the borrowed list
       setAvailableBooks((prevBooks) =>
-        prevBooks.filter((book) => book.id !== bookId)
+        prevBooks.filter((book) => book._id !== bookId)
       ); // Remove the book from the available list
     } catch (error) {
       console.error("Error borrowing the book:", error);
@@ -109,7 +128,7 @@ setCreatedBooks(currentUser.createdBooks);
       );
       console.log("Book deleted");
       setCreatedBooks((prevBooks) =>
-        prevBooks.filter((book) => book.id !== bookId)
+        prevBooks.filter((book) => book._id !== bookId)
       ); // Remove the book from the created list
     } catch (error) {
       console.error("Error deleting the book:", error);
@@ -127,6 +146,7 @@ setCreatedBooks(currentUser.createdBooks);
         handleBorrowBook,
         handleReleaseBook,
         handleDeleteBook,
+        handleMakeBookAvailable,
       }}
     >
       {children}
