@@ -1,10 +1,14 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Book = () => {
   const { bookId } = useParams();
+  const navigate = useNavigate();
   const [book, setBook] = useState(null);
+  const [likedParagraphs, setLikedParagraphs] = useState({});
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     axios
@@ -12,23 +16,33 @@ const Book = () => {
       .then((res) => {
         console.log("Book details fetched:", res.data);
         setBook(res.data);
-      }) 
+      })
       .catch((err) => {
         console.log("Error fetching book details:", err);
       });
   }, [bookId]);
 
   function handleLikeParagraph(paragraphId) {
+    if (likedParagraphs[paragraphId]) return;
+
     axios
-      .get(`${import.meta.env.VITE_API_URL}/paragraph/like-paragraph/${paragraphId}/${book.author._id}`)
+      .get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/paragraph/like-paragraph/${paragraphId}/${book.author._id}`
+      )
       .then((res) => {
         console.log("You liked this paragraph:", res.data);
+
+        setLikedParagraphs((prevState) => ({
+          ...prevState,
+          [paragraphId]: true, // "liked!"
+        }));
+
         setBook((prevBook) => ({
           ...prevBook,
-
-          paragraph: prevBook.paragraph.map((para) =>
-            
-            para._id === paragraphId ? res.data.paragraph : para
+          paragraph: prevBook.paragraph.map(
+            (para) => (para._id === paragraphId ? res.data.paragraph : para) // "para"  could be pizza
           ),
         }));
       })
@@ -39,12 +53,18 @@ const Book = () => {
 
   function handleDeleteParagraph(paragraphId) {
     axios
-      .delete(`${import.meta.env.VITE_API_URL}/paragraph/delete-paragraph/${bookId}/${paragraphId}`)
+      .delete(
+        `${
+          import.meta.env.VITE_API_URL
+        }/paragraph/delete-paragraph/${bookId}/${paragraphId}`
+      )
       .then(() => {
         console.log("Paragraph deleted");
         setBook((prevBook) => ({
           ...prevBook,
-          paragraph: prevBook.paragraph.filter((para) => para._id !== paragraphId),
+          paragraph: prevBook.paragraph.filter(
+            (para) => para._id !== paragraphId
+          ),
         }));
       })
       .catch((err) => {
@@ -52,32 +72,33 @@ const Book = () => {
       });
   }
 
+  function handleEditParagraph(paragraphId) {
+    navigate(`/edit-paragraph/${paragraphId}`);
+  }
+
   if (!book) {
     return <p>Loading book details...</p>;
   }
 
   return (
-    <div className="book-page">
-      <h3>{book.title}</h3>
-      <p>
-        <strong>Author:</strong> {book.author.username}
-      </p>
-      <p>
-        <strong>Created on:</strong> {new Date(book.createdAt).toLocaleDateString()}
-      </p>
-      <Link to={`/read-book/${bookId}`}>
-        <button>Read</button>
-      </Link>
-      <h4>Paragraphs</h4>
-      <div>
-        {book.paragraph.map((para) => (
-          <div key={para._id}>
-            <p>{para.text}</p>
-            <button onClick={() => handleLikeParagraph(para._id)}>Like ({para.likes.length})</button>
-            <button onClick={() => handleDeleteParagraph(para._id)}>Delete</button>
-          </div>
-        ))}
-      </div>
+    <div>
+      {book.paragraph.map((para) => (
+        <div key={para._id}>
+          <p>{para.text}</p>
+          <button
+            onClick={() => handleLikeParagraph(para._id)}
+            disabled={likedParagraphs[para._id]} // Deshabilitar botón si ya ha dado like
+          >
+            {likedParagraphs[para._id] ? "Liked" : "Like"}
+          </button>
+          {user._id === book.author._id && (
+            <button onClick={() => handleEditParagraph(para._id)}>Edit</button>
+          )}
+          <button onClick={() => handleDeleteParagraph(para._id)}>
+            Delete
+          </button>
+        </div>
+      ))}
     </div>
   );
 };

@@ -8,11 +8,9 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
   const nav = useNavigate();
 
-
   function handleSignup(event) {
-
     event.preventDefault();
-    const userToCreateInDB = { username, email, password};
+    const userToCreateInDB = { username, email, password };
     axios
       .post(`${import.meta.env.VITE_API_URL}/auth/signUp`, userToCreateInDB)
       .then((res) => {
@@ -26,7 +24,7 @@ const SignUpPage = () => {
 
   return (
     <div className="signup-page">
-      <h3>Sign in with us</h3>
+      <h3>Sign Up with us</h3>
       <form onSubmit={handleSignup}>
         <label>
           Username:
@@ -70,4 +68,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage
+export default SignUpPage;
