@@ -29,7 +29,7 @@ const Book = () => {
       .get(
         `${
           import.meta.env.VITE_API_URL
-        }/paragraph/like-paragraph/${paragraphId}/${book.author._id}`
+        }/paragraph/like-paragraph/${paragraphId}/${user._id}`
       )
       .then((res) => {
         console.log("You liked this paragraph:", res.data);
@@ -87,16 +87,20 @@ const Book = () => {
           <p>{para.text}</p>
           <button
             onClick={() => handleLikeParagraph(para._id)}
-            disabled={likedParagraphs[para._id]} // Deshabilitar botón si ya ha dado like
+            disabled={likedParagraphs[para._id]}
           >
             {likedParagraphs[para._id] ? "Liked" : "Like"}
           </button>
-          {user._id === book.author._id && (
+
+          {para.author?._id === user?._id && (
             <button onClick={() => handleEditParagraph(para._id)}>Edit</button>
           )}
-          <button onClick={() => handleDeleteParagraph(para._id)}>
-            Delete
-          </button>
+
+          {para.author?._id === user?._id && (
+            <button onClick={() => handleDeleteParagraph(para._id)}>
+              Delete
+            </button>
+          )}
         </div>
       ))}
     </div>
