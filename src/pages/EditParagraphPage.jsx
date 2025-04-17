@@ -42,6 +42,11 @@ const EditParagraphPage = () => {
         {
           text,
           userId: currentUser._id,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
         }
       )
       .then(() => {

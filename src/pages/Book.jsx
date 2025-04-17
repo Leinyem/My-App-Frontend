@@ -8,7 +8,7 @@ const Book = () => {
   const navigate = useNavigate();
   const [book, setBook] = useState(null);
   const [likedParagraphs, setLikedParagraphs] = useState({});
-  const { user } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     axios
@@ -29,7 +29,7 @@ const Book = () => {
       .get(
         `${
           import.meta.env.VITE_API_URL
-        }/paragraph/like-paragraph/${paragraphId}/${user._id}`
+        }/paragraph/like-paragraph/${paragraphId}/${currentUser._id}`
       )
       .then((res) => {
         console.log("You liked this paragraph:", res.data);
@@ -92,11 +92,11 @@ const Book = () => {
             {likedParagraphs[para._id] ? "Liked" : "Like"}
           </button>
 
-          {para.author?._id === user?._id && (
+          {para.user === currentUser?._id && (
             <button onClick={() => handleEditParagraph(para._id)}>Edit</button>
           )}
 
-          {para.author?._id === user?._id && (
+          {para.author?._id === currentUser?._id && (
             <button onClick={() => handleDeleteParagraph(para._id)}>
               Delete
             </button>
