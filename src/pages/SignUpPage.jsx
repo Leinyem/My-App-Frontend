@@ -6,11 +6,12 @@ const SignUpPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [profileImage, setProfileImage] = useState();
   const nav = useNavigate();
 
   function handleSignup(event) {
     event.preventDefault();
-    const userToCreateInDB = { username, email, password };
+    const userToCreateInDB = { username, email, password, profileImage };
     axios
       .post(`${import.meta.env.VITE_API_URL}/auth/signUp`, userToCreateInDB)
       .then((res) => {
@@ -24,7 +25,7 @@ const SignUpPage = () => {
 
   return (
     <div className="signup-page">
-      <h3>Sign Up with us</h3>
+      <h3>Join the Project</h3>
       <form onSubmit={handleSignup}>
         <label>
           Username:
@@ -59,6 +60,18 @@ const SignUpPage = () => {
             }}
           />
         </label>
+        <label>
+          Image-url:
+          <input
+            type="text"
+            placeholder="image here"
+            value={profileImage}
+            onChange={(e) => {
+              setProfileImage(e.target.value);
+            }}
+          />
+        </label>
+
         <button>Signup</button>
       </form>
       <p>

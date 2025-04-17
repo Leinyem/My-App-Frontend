@@ -101,3 +101,169 @@ form label {
 .errorMessage {
   color: red;
 }
+
+.signup-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /*background-image: url('/background.jpg');*/ /* asegúrate de tener esta imagen en public */
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+}
+
+.signup-page form {
+  background-color: rgba(255, 255, 255, 0.92);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  max-width: 500px;
+  width: 100%;
+}
+
+.signup-page label {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.signup-page input {
+  margin-top: 5px;
+}
+
+.signup-page h3 {
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.signup-page p {
+  margin-top: 20px;
+  background-color: rgba(255, 255, 255, 0.75);
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+
+nav {
+  position: relative;
+  width: 100%;
+  background-color: #ffffffcc;
+  padding: 20px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+nav h1 {
+  margin: 0;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  padding-right: 20px;
+}
+
+nav button {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.login-page {
+  max-width: 500px;
+  margin: 60px auto;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-page {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.8s ease-in-out;
+  text-align: center;
+}
+
+.profile-page h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.profile-page .profile-img {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.profile-page button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.profile-page button:hover {
+  background-color: #0056b3;
+}
+
+.profile-page .book-list {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.profile-page .book-list div {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  text-align: left;
+}
+
+.profile-page .book-list h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.profile-page .book-list button {
+  background-color: #28a745;
+  margin-top: 10px;
+}
+
+.profile-page .book-list button:hover {
+  background-color: #218838;
+}
+
+.profile-page .book-list .show-more {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.profile-page .book-list .show-more:hover {
+  background-color: #e0a800;
+}

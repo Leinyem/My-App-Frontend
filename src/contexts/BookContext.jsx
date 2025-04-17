@@ -14,7 +14,7 @@ const BookContextWrapper = ({ children }) => {
   const nav = useNavigate();
 
   // VERIFY THE TOKEN AGAIN WHEN RELOAD!!
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
 
   useEffect(() => {
     if (currentUser) {
@@ -35,6 +35,32 @@ const BookContextWrapper = ({ children }) => {
 
         setAllBooks(res.data.books);
         setAvailableBooks(res.data.books.filter((book) => book.available));
+      })
+      .catch((err) => {
+        console.error("Books lost somewhere uncertain:", err);
+      });
+  };
+
+  const updateOneBook = (event, bookId, text) => {
+    event.preventDefault();
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/paragraph/add-paragraph`, {
+        text,
+        bookId,
+        user: currentUser._id,
+      })
+      .then((res) => {
+        console.log("Books achieved!:", res.data);
+        setCurrentUser(res.data.updatedUser);
+        const updatedBooks = allBooks.map((book) => {
+          if (book._id === bookId) {
+            return res.data.book;
+          } else {
+            return book;
+          }
+        });
+        setAllBooks(updatedBooks);
+        nav(`/book/${bookId}`); // Redirect
       })
       .catch((err) => {
         console.error("Books lost somewhere uncertain:", err);
@@ -147,6 +173,7 @@ const BookContextWrapper = ({ children }) => {
         handleReleaseBook,
         handleDeleteBook,
         handleMakeBookAvailable,
+        updateOneBook,
       }}
     >
       {children}
