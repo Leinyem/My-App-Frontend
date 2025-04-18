@@ -1,10 +1,12 @@
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export const Navbar = () => {
   const { isLoggedIn, handleLogout } = useContext(AuthContext);
-
+  const location = useLocation();
+  const hideProfileButton =
+    location.pathname === "/signup" || location.pathname === "/login";
   console.log("Navbar - isLoggedIn:", isLoggedIn);
 
   return (
@@ -22,9 +24,11 @@ export const Navbar = () => {
 
       {isLoggedIn && (
         <div style={{ display: "flex", gap: "10px" }}>
-          <Link to="/profile">
-            <button style={{ backgroundColor: "orange" }}>Profile</button>
-          </Link>
+          {!hideProfileButton && (
+            <Link to="/profile">
+              <button style={{ backgroundColor: "orange" }}>Profile</button>
+            </Link>
+          )}
           <button style={{ backgroundColor: "red" }} onClick={handleLogout}>
             Logout
           </button>
