@@ -36,13 +36,13 @@ const Book = () => {
 
         setLikedParagraphs((prevState) => ({
           ...prevState,
-          [paragraphId]: true, // "liked!"
+          [paragraphId]: true,
         }));
 
         setBook((prevBook) => ({
           ...prevBook,
-          paragraph: prevBook.paragraph.map(
-            (para) => (para._id === paragraphId ? res.data.paragraph : para) // "para"  could be pizza
+          paragraph: prevBook.paragraph.map((para) =>
+            para._id === paragraphId ? res.data.paragraph : para
           ),
         }));
       })
@@ -77,13 +77,13 @@ const Book = () => {
   }
 
   if (!book) {
-    return <p>Loading book details...</p>;
+    return <p className="loading-text">Loading book details...</p>;
   }
 
   return (
-    <div>
+    <div className="book-page">
       {book.paragraph.map((para) => (
-        <div key={para._id}>
+        <div key={para._id} className="paragraph-item">
           <p>{para.text}</p>
           <button
             onClick={() => handleLikeParagraph(para._id)}

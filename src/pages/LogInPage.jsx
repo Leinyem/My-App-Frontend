@@ -63,7 +63,7 @@ const LogInPage = () => {
       {errorMessage ? <p className="errorMessage">{errorMessage}</p> : null}
 
       <p>
-        New here...? <Link to="/">SignUp</Link>
+        Story wanderer? <Link to="/">Join the Book People</Link>
       </p>
     </div>
   );

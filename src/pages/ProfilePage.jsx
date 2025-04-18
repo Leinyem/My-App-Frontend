@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 export const ProfilePage = () => {
-  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const {
     createdBooks,
     handleDeleteBook,
@@ -16,7 +16,6 @@ export const ProfilePage = () => {
   } = useContext(BookContext);
 
   const [profileUser, setProfileUser] = useState({ createdBooks: [] });
-
   const [visibleCreatedBooks, setVisibleCreatedBooks] = useState(3);
   const [visibleBorrowedBooks, setVisibleBorrowedBooks] = useState(3);
   const [visibleAvailableBooks, setVisibleAvailableBooks] = useState(3);
@@ -33,7 +32,7 @@ export const ProfilePage = () => {
   }, []);
 
   if (!profileUser) {
-    return <p>Loading user data...</p>;
+    return <p className="loading-text">Loading user data...</p>;
   }
 
   return (
@@ -53,14 +52,14 @@ export const ProfilePage = () => {
       </div>
 
       <div className="book-list">
-        <div>
+        <div className="book-section">
           <h3>Created Books</h3>
           {createdBooks.length === 0 ? (
             <p>You haven't created any books yet.</p>
           ) : (
-            <div>
+            <>
               {createdBooks.slice(0, visibleCreatedBooks).map((book) => (
-                <div key={book._id}>
+                <div key={book._id} className="book-item">
                   <Link to={`/book/${book._id}`}>{book.title}</Link>
                   <button onClick={() => handleDeleteBook(book._id)}>
                     Delete
@@ -80,18 +79,18 @@ export const ProfilePage = () => {
                   Show More
                 </button>
               )}
-            </div>
+            </>
           )}
         </div>
 
-        <div>
+        <div className="book-section">
           <h3>Borrowed Books</h3>
           {borrowedBooks.length === 0 ? (
             <p>You don't have any borrowed books.</p>
           ) : (
-            <div>
+            <>
               {borrowedBooks.slice(0, visibleBorrowedBooks).map((book) => (
-                <div key={book._id}>
+                <div key={book._id} className="book-item">
                   <Link to={`/book/${book._id}`}>{book.title}</Link>
                 </div>
               ))}
@@ -103,18 +102,18 @@ export const ProfilePage = () => {
                   Show More
                 </button>
               )}
-            </div>
+            </>
           )}
         </div>
 
-        <div>
+        <div className="book-section">
           <h3>The Archive</h3>
           {availableBooks.length === 0 ? (
             <p>No available books at the moment.</p>
           ) : (
             <>
               {availableBooks.slice(0, visibleAvailableBooks).map((book) => (
-                <div key={book._id}>
+                <div key={book._id} className="book-item">
                   <Link to={`/book/${book._id}`}>{book.title}</Link>
                   <button onClick={() => handleBorrowBook(book._id)}>
                     Borrow

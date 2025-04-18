@@ -10,7 +10,10 @@ export const CreateBookPage = () => {
 
   return (
     <div>
-      <h2> Here goes the SKing's quote</h2>
+      <h2 className="quote-text">
+        "Your intuition knows what to write, so get out of the way." - Ray
+        Bradbury
+      </h2>{" "}
       <form
         onSubmit={(event) => {
           const newBook = {
