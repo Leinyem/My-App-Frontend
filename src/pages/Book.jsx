@@ -106,6 +106,9 @@ const Book = () => {
       <Link to={`/update-book/${bookId}`}>
         <button>Add</button>
       </Link>
+      <Link to={`/read-book/${bookId}`}>
+        <button>Read</button>
+      </Link>
     </div>
   );
 };

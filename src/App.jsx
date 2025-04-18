@@ -11,14 +11,29 @@ import Book from "./pages/Book";
 import ReadBook from "./pages/ReadBook";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import EditParagraphPage from "./pages/EditParagraphPage";
+import { LoggedInProtectedRoute } from "./components/LoggedInProtectedRoute";
 
 function App() {
   return (
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<SignUpPage />} />
-        <Route path="/logIn" element={<LogInPage />} />
+        <Route
+          path="/"
+          element={
+            <LoggedInProtectedRoute>
+              <SignUpPage />
+            </LoggedInProtectedRoute>
+          }
+        />
+        <Route
+          path="/logIn"
+          element={
+            <LoggedInProtectedRoute>
+              <LogInPage />
+            </LoggedInProtectedRoute>
+          }
+        />
         <Route
           path="/profile"
           element={
