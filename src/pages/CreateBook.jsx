@@ -21,7 +21,7 @@ export const CreateBookPage = () => {
             author: currentUser._id,
             text,
           };
-          handleCreateBook(event, newBook, image);
+          handleCreateBook(event, newBook);
         }}
       >
         <label>
